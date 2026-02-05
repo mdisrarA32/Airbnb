@@ -29,7 +29,7 @@ function SignUp() {
       toast.success("Signup Successfully");
       navigate("/");
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
     setLoading(false);
   };
