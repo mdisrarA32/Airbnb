@@ -13,35 +13,37 @@ import MyListing from './pages/MyListing'
 import ViewCard from './pages/ViewCard'
 import MyBooking from './pages/MyBooking'
 import Booked from './pages/Booked'
+import Footer from './Component/Footer'
 
 
 function App() {
-  let {userData} = useContext(userDataContext)
- 
+  let { userData } = useContext(userDataContext)
+
   return (
     <>
-    <ToastContainer />
-    <Routes>
-      <Route path='/' element={<Home/>}/>
-      <Route path='/login' element={<Login/>}/>
-      <Route path='/signup' element={<SignUp/>}/>
-      <Route path='/listingpage1' 
-      element={userData != null ? <ListingPage1/>:<Navigate to={"/"}/>}/>
-      <Route path='/listingpage2' 
-      element={userData != null ? <ListingPage2/>:<Navigate to={"/"}/>}/>
-      <Route path='/listingpage3'
-       element={userData != null ? <ListingPage3/>:<Navigate to={"/"}/>}/>
-      <Route path='/mylisting'
-       element={userData != null ? <MyListing/>:<Navigate to={"/"}/>}/>
+      <ToastContainer />
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/signup' element={<SignUp />} />
+        <Route path='/listingpage1'
+          element={userData != null ? <ListingPage1 /> : <Navigate to={"/"} />} />
+        <Route path='/listingpage2'
+          element={userData != null ? <ListingPage2 /> : <Navigate to={"/"} />} />
+        <Route path='/listingpage3'
+          element={userData != null ? <ListingPage3 /> : <Navigate to={"/"} />} />
+        <Route path='/mylisting'
+          element={userData != null ? <MyListing /> : <Navigate to={"/"} />} />
         <Route path='/viewcard'
-        element={userData != null ? <ViewCard/>:<Navigate to={"/"}/>}/>
-         <Route path='/mybooking'
-       element={userData != null ? <MyBooking/>:<Navigate to={"/"}/>}/>
-       <Route path='/booked'
-       element={userData != null ? <Booked/>:<Navigate to={"/"}/>}/>
-      
+          element={userData != null ? <ViewCard /> : <Navigate to={"/"} />} />
+        <Route path='/mybooking'
+          element={userData != null ? <MyBooking /> : <Navigate to={"/"} />} />
+        <Route path='/booked'
+          element={userData != null ? <Booked /> : <Navigate to={"/"} />} />
 
-    </Routes>
+
+      </Routes>
+      <Footer />
     </>
   )
 }

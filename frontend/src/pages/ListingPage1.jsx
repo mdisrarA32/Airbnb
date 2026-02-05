@@ -4,100 +4,166 @@ import { useNavigate } from 'react-router-dom';
 import { listingDataContext } from '../Context/ListingContext';
 
 function ListingPage1() {
-   let navigate = useNavigate()
-   let {title,setTitle,
-    description,setDescription,
-    frontEndImage1,setFrontEndImage1,
-    frontEndImage2,setFrontEndImage2,
-    frontEndImage3,setFrontEndImage3,
-    backEndImage1,setBackEndImage1,
-    backEndImage2,setBackEndImage2,
-    backEndImage3,setBackEndImage3,
-    rent,setRent,
-    city,setCity,
-    landmark,setLandmark,
-    category,setCategory} = useContext(listingDataContext)
-    
+  let navigate = useNavigate()
+  let { title, setTitle,
+    description, setDescription,
+    frontEndImage1, setFrontEndImage1,
+    frontEndImage2, setFrontEndImage2,
+    frontEndImage3, setFrontEndImage3,
+    backEndImage1, setBackEndImage1,
+    backEndImage2, setBackEndImage2,
+    backEndImage3, setBackEndImage3,
+    rent, setRent,
+    city, setCity,
+    landmark, setLandmark,
+    category, setCategory } = useContext(listingDataContext)
 
-    const handleImage1 = (e)=>{
-        let file = e.target.files[0]
-        setBackEndImage1(file)
-        setFrontEndImage1(URL.createObjectURL(file))
-    }
-    const handleImage2 = (e)=>{
-        let file = e.target.files[0]
-        setBackEndImage2(file)
-        setFrontEndImage2(URL.createObjectURL(file))
-    }
-    const handleImage3 = (e)=>{
-        let file = e.target.files[0]
-        setBackEndImage3(file)
-        setFrontEndImage3(URL.createObjectURL(file))
-    }
+
+  const handleImage1 = (e) => {
+    let file = e.target.files[0]
+    setBackEndImage1(file)
+    setFrontEndImage1(URL.createObjectURL(file))
+  }
+  const handleImage2 = (e) => {
+    let file = e.target.files[0]
+    setBackEndImage2(file)
+    setFrontEndImage2(URL.createObjectURL(file))
+  }
+  const handleImage3 = (e) => {
+    let file = e.target.files[0]
+    setBackEndImage3(file)
+    setFrontEndImage3(URL.createObjectURL(file))
+  }
+
   return (
-    <div className='w-[100%] h-[100vh] bg-white flex items-center justify-center relative overflow-auto'>
+    <div className='min-h-screen w-full bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center p-4 relative font-sans'>
 
-        <form action="" className='max-w-[900px] w-[90%] h-[550px] flex items-center justify-start flex-col md:items-start gap-[10px] overflow-auto mt-[50px]' onSubmit={(e)=>{e.preventDefault()
-            navigate("/listingpage2")}
-        }>
-            <div className='w-[50px] h-[50px] bg-[red] cursor-pointer absolute top-[5%] left-[20px] rounded-[50%] flex items-center justify-center' onClick={()=>navigate("/")}><FaArrowLeftLong className='w-[25px] h-[25px] text-[white]' /></div>
-            <div className='w-[200px] h-[50px] text-[20px] bg-[#f14242] text-[white] flex items-center justify-center rounded-[30px] absolute top-[5%] right-[10px] shadow-lg'>
-                SetUp Your Home
+      {/* Back Button */}
+      <button
+        onClick={() => navigate("/")}
+        className="absolute top-6 left-6 p-3 rounded-full bg-white/50 hover:bg-white shadow-sm transition-all duration-300 backdrop-blur-sm z-10 group"
+      >
+        <FaArrowLeftLong className='w-5 h-5 text-gray-600 group-hover:text-gray-900' />
+      </button>
+
+      {/* Glass Card */}
+      <div className="w-full max-w-2xl bg-white/30 backdrop-blur-xl rounded-3xl border border-white/60 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] overflow-hidden p-8 md:p-12 relative my-10">
+
+        <div className="text-center mb-10">
+          <h1 className="text-3xl font-bold text-gray-800 tracking-tight">Create Listing</h1>
+          <p className="text-gray-500 mt-2 text-sm">Fill in the details to setup your home</p>
+        </div>
+
+        <form
+          className='flex flex-col gap-6'
+          onSubmit={(e) => {
+            e.preventDefault()
+            navigate("/listingpage2")
+          }}
+        >
+
+          {/* Title */}
+          <div className='group'>
+            <label htmlFor="title" className='block text-sm font-medium text-gray-700 mb-1.5 ml-1'>Title</label>
+            <input
+              type="text"
+              id='title'
+              className='w-full px-5 py-3 rounded-xl bg-white/50 border border-gray-200 focus:border-rose-400 focus:ring-4 focus:ring-rose-100 focus:outline-none transition-all duration-300 placeholder:text-gray-400 text-gray-700'
+              required
+              onChange={(e) => setTitle(e.target.value)}
+              value={title}
+              placeholder='e.g. Cozy Cottage in the Woods'
+            />
+          </div>
+
+          {/* Description */}
+          <div>
+            <label htmlFor="des" className='block text-sm font-medium text-gray-700 mb-1.5 ml-1'>Description</label>
+            <textarea
+              id="des"
+              className='w-full px-5 py-3 rounded-xl bg-white/50 border border-gray-200 focus:border-rose-400 focus:ring-4 focus:ring-rose-100 focus:outline-none transition-all duration-300 placeholder:text-gray-400 h-32 resize-none text-gray-700'
+              required
+              onChange={(e) => setDescription(e.target.value)}
+              value={description}
+              placeholder='Tell guests what makes your place specific...'
+            ></textarea>
+          </div>
+
+          {/* Images Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {[
+              { id: 'img1', label: 'Cover Image', handler: handleImage1 },
+              { id: 'img2', label: 'Image 2', handler: handleImage2 },
+              { id: 'img3', label: 'Image 3', handler: handleImage3 },
+            ].map((img, idx) => (
+              <div key={idx}>
+                <label htmlFor={img.id} className='block text-sm font-medium text-gray-700 mb-1.5 ml-1'>{img.label}</label>
+                <input
+                  type="file"
+                  id={img.id}
+                  className='w-full text-sm text-gray-500
+                                file:mr-4 file:py-2.5 file:px-4
+                                file:rounded-xl file:border-0
+                                file:text-xs file:font-bold
+                                file:bg-white/80 file:text-rose-600
+                                hover:file:bg-white
+                                cursor-pointer bg-white/50 rounded-xl border border-gray-200 p-1'
+                  required
+                  onChange={img.handler}
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Rent, City, Landmark Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div>
+              <label htmlFor="rent" className='block text-sm font-medium text-gray-700 mb-1.5 ml-1'>Rent / Day</label>
+              <input
+                type="number"
+                id='rent'
+                className='w-full px-5 py-3 rounded-xl bg-white/50 border border-gray-200 focus:border-rose-400 focus:ring-4 focus:ring-rose-100 focus:outline-none transition-all duration-300 placeholder:text-gray-400 text-gray-700'
+                required
+                onChange={(e) => setRent(e.target.value)}
+                value={rent}
+                placeholder='0.00'
+              />
             </div>
-            <div className='w-[90%] flex items-start justify-start flex-col gap-[10px]'>
-              <label htmlFor="title" className='text-[20px]'>Title</label>
-              <input type="text" id='title' className='w-[90%] h-[40px] border-[2px] border-[#555656] rounded-lg text-[18px] px-[20px]' required onChange={(e)=>setTitle(e.target.value)} value={title} placeholder='_bhk house or best title '/>
-            </div> 
+            <div>
+              <label htmlFor="city" className='block text-sm font-medium text-gray-700 mb-1.5 ml-1'>City</label>
+              <input
+                type="text"
+                id='city'
+                className='w-full px-5 py-3 rounded-xl bg-white/50 border border-gray-200 focus:border-rose-400 focus:ring-4 focus:ring-rose-100 focus:outline-none transition-all duration-300 placeholder:text-gray-400 text-gray-700'
+                required
+                onChange={(e) => setCity(e.target.value)}
+                value={city}
+                placeholder='New York'
+              />
+            </div>
+            <div>
+              <label htmlFor="landmark" className='block text-sm font-medium text-gray-700 mb-1.5 ml-1'>Landmark</label>
+              <input
+                type="text"
+                id='landmark'
+                className='w-full px-5 py-3 rounded-xl bg-white/50 border border-gray-200 focus:border-rose-400 focus:ring-4 focus:ring-rose-100 focus:outline-none transition-all duration-300 placeholder:text-gray-400 text-gray-700'
+                required
+                onChange={(e) => setLandmark(e.target.value)}
+                value={landmark}
+                placeholder='Near Central Park'
+              />
+            </div>
+          </div>
 
-            <div className='w-[90%] flex items-start justify-start flex-col gap-[10px]'>
-              <label htmlFor="des" className='text-[20px]'>Description</label>
-              <textarea name="" id="des" className='w-[90%] h-[80px] border-[2px] border-[#555656] rounded-lg text-[18px] px-[20px]' required onChange={(e)=>setDescription(e.target.value)} value={description} ></textarea>
-            </div> 
-
-            <div className='w-[90%] flex items-start justify-center flex-col gap-[10px]'>
-              <label htmlFor="img1" className='text-[20px]'>Image1</label>
-              <div className='flex items-center justify-start  w-[90%] h-[40px] border-[#555656] border-2 rounded-[10px] '><input type="file" id='img1' className='w-[100%] text-[15px] px-[10px] ' required onChange={handleImage1}/>
-              </div>
-            </div> 
-
-            <div className='w-[90%] flex items-start justify-center flex-col gap-[10px]'>
-              <label htmlFor="img2" className='text-[20px]'>Image2</label>
-              <div className='flex items-center justify-start  w-[90%] h-[40px] border-[#555656] border-2 rounded-[10px]'><input type="file" id='img2' className='w-[100%] text-[15px] px-[10px] ' required onChange={handleImage2} />
-              </div>
-            </div> 
-
-            <div className='w-[90%] flex items-start justify-center flex-col gap-[10px]'>
-              <label htmlFor="img3" className='text-[20px]'>Image3</label>
-              <div className='flex items-center justify-start  w-[90%] h-[40px] border-[#555656] border-2 rounded-[10px]'><input type="file" id='img3' className='w-[100%] text-[15px] px-[10px] ' required  onChange={handleImage3}/>
-              </div>
-            </div> 
-
-            <div className='w-[90%] flex items-start justify-start flex-col gap-[10px]'>
-              <label htmlFor="rent" className='text-[20px]'>Rent</label>
-              <input type="number" id='rent' className='w-[90%] h-[40px] border-[2px] border-[#555656] rounded-lg text-[18px] px-[20px]' required onChange={(e)=>setRent(e.target.value)} value={rent} placeholder='Rs.______/day'/>
-            </div> 
-
-            <div className='w-[90%] flex items-start justify-start flex-col gap-[10px]'>
-              <label htmlFor="city" className='text-[20px]'>City</label>
-              <input type="text" id='city' className='w-[90%] h-[40px] border-[2px] border-[#555656] rounded-lg text-[18px] px-[20px]' required onChange={(e)=>setCity(e.target.value)} value={city} placeholder='city,country'/>
-            </div> 
-
-            <div className='w-[90%] flex items-start justify-start flex-col gap-[10px]'>
-              <label htmlFor="landmark" className='text-[20px]'>Landmark</label>
-              <input type="text" id='landmark' className='w-[90%] h-[40px] border-[2px] border-[#555656] rounded-lg text-[18px] px-[20px]' required onChange={(e)=>setLandmark(e.target.value)} value={landmark}/>
-
-            </div> 
-
-            <button className='px-[50px] py-[10px] bg-[red] text-[white] text-[18px] md:px-[100px] rounded-lg '>Next</button>
-
-
-
-
+          {/* Submit Button */}
+          <div className="mt-8 flex justify-center">
+            <button className='w-full md:w-auto px-16 py-4 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold rounded-full shadow-lg hover:shadow-rose-500/30 transform hover:-translate-y-0.5 transition-all duration-200 text-lg tracking-wide'>
+              Next Step
+            </button>
+          </div>
 
         </form>
-      
-
-      
+      </div>
     </div>
   )
 }
