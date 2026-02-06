@@ -40,64 +40,69 @@ function SignUp() {
       <div className="w-full md:w-1/2 bg-white flex items-center justify-center">
         <form
           onSubmit={handleSignUP}
-          className="w-[80%] max-w-md flex flex-col gap-4"
+          className="w-[80%] max-w-md flex flex-col gap-6"
         >
-          <h1 className="text-3xl font-semibold">Create account</h1>
+          <div className="mb-2">
+            <h1 className="text-4xl font-bold text-gray-900 tracking-tight">Create account</h1>
+            <p className="text-gray-500 mt-2">Join us and start your journey.</p>
+          </div>
 
-          <input
-            type="text"
-            placeholder="Username"
-            className="border rounded-lg p-3"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-
-          <input
-            type="email"
-            placeholder="Email"
-            className="border rounded-lg p-3"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-
-          <div className="relative">
+          <div className="space-y-4">
             <input
-              type={show ? "text" : "password"}
-              placeholder="Password"
-              className="border rounded-lg p-3 w-full"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              type="text"
+              placeholder="Username"
+              className="w-full px-5 py-4 rounded-xl border border-gray-200 focus:border-rose-500 focus:ring-4 focus:ring-rose-50 outline-none transition-all duration-300 placeholder:text-gray-400 bg-gray-50 focus:bg-white"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               required
             />
-            {show ? (
-              <IoMdEyeOff
-                className="absolute right-3 top-4 cursor-pointer"
-                onClick={() => setShow(false)}
+
+            <input
+              type="email"
+              placeholder="Email"
+              className="w-full px-5 py-4 rounded-xl border border-gray-200 focus:border-rose-500 focus:ring-4 focus:ring-rose-50 outline-none transition-all duration-300 placeholder:text-gray-400 bg-gray-50 focus:bg-white"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+
+            <div className="relative">
+              <input
+                type={show ? "text" : "password"}
+                placeholder="Password"
+                className="w-full px-5 py-4 rounded-xl border border-gray-200 focus:border-rose-500 focus:ring-4 focus:ring-rose-50 outline-none transition-all duration-300 placeholder:text-gray-400 bg-gray-50 focus:bg-white"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
               />
-            ) : (
-              <IoMdEye
-                className="absolute right-3 top-4 cursor-pointer"
-                onClick={() => setShow(true)}
-              />
-            )}
+              {show ? (
+                <IoMdEyeOff
+                  className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600 w-5 h-5"
+                  onClick={() => setShow(false)}
+                />
+              ) : (
+                <IoMdEye
+                  className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600 w-5 h-5"
+                  onClick={() => setShow(true)}
+                />
+              )}
+            </div>
           </div>
 
           <button
-            className="bg-black text-white py-3 rounded-lg"
+            className="w-full py-4 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold rounded-xl shadow-lg hover:shadow-rose-500/30 transform hover:-translate-y-0.5 transition-all duration-200 text-lg disabled:opacity-70 disabled:cursor-not-allowed"
             disabled={loading}
           >
             {loading ? "Loading..." : "Sign Up"}
           </button>
 
-          <p className="text-sm">
+          <p className="text-center text-gray-500">
             Already have an account?{" "}
             <span
-              className="font-semibold cursor-pointer"
+              className="text-rose-600 font-bold cursor-pointer hover:underline"
               onClick={() => navigate("/login")}
             >
-              Login
+              Log in
             </span>
           </p>
         </form>

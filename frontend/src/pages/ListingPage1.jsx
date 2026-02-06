@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate } from 'react-router-dom';
 import { listingDataContext } from '../Context/ListingContext';
+import { getSmartPriceSuggestion } from '../utils/calculations';
 
 function ListingPage1() {
   let navigate = useNavigate()
@@ -16,7 +17,9 @@ function ListingPage1() {
     rent, setRent,
     city, setCity,
     landmark, setLandmark,
-    category, setCategory } = useContext(listingDataContext)
+    category, setCategory,
+    listingData
+  } = useContext(listingDataContext)
 
 
   const handleImage1 = (e) => {
@@ -128,6 +131,15 @@ function ListingPage1() {
                 value={rent}
                 placeholder='0.00'
               />
+              {city && getSmartPriceSuggestion(city, category, listingData) && (
+                <p className="text-xs text-rose-500 mt-1 font-medium bg-rose-50 p-2 rounded-lg border border-rose-100 flex items-center gap-2">
+                  <span className="bg-rose-100 p-1 rounded-full px-2">💡</span>
+                  <span>
+                    Avg in {city}: ₹{getSmartPriceSuggestion(city, category, listingData).avg}
+                    <span className="text-gray-400 font-normal ml-1">(₹{getSmartPriceSuggestion(city, category, listingData).min} - ₹{getSmartPriceSuggestion(city, category, listingData).max})</span>
+                  </span>
+                </p>
+              )}
             </div>
             <div>
               <label htmlFor="city" className='block text-sm font-medium text-gray-700 mb-1.5 ml-1'>City</label>

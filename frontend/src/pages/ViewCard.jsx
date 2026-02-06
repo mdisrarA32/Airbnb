@@ -10,6 +10,7 @@ import { FaStar } from "react-icons/fa";
 import { bookingDataContext } from '../Context/BookingContext';
 import { toast } from 'react-toastify';
 import { CiLocationOn } from "react-icons/ci";
+import { getConfidenceScore, getHostScore } from '../utils/calculations';
 
 function ViewCard() {
     let navigate = useNavigate()
@@ -54,6 +55,9 @@ function ViewCard() {
         }
 
     }, [checkIn, checkOut, cardDetails.rent, total])
+
+    const confidence = getConfidenceScore(cardDetails);
+    const hostScore = getHostScore(cardDetails);
 
 
 
@@ -204,7 +208,40 @@ function ViewCard() {
                                 </div>
                             </div>
 
-                            <div className="border-t border-gray-100 pt-6">
+                            {/* Confidence & Stats */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-6 border-y border-gray-100">
+                                <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                                    <h3 className="text-gray-900 font-bold mb-1 flex items-center gap-2">
+                                        Booking Confidence
+                                        <span className={`text-xs px-2 py-0.5 rounded-full ${confidence > 80 ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                                            {confidence > 80 ? 'High' : 'Moderate'}
+                                        </span>
+                                    </h3>
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                            <div
+                                                className={`h-full rounded-full ${confidence > 80 ? 'bg-green-500' : 'bg-yellow-500'}`}
+                                                style={{ width: `${confidence}%` }}
+                                            />
+                                        </div>
+                                        <span className="font-bold text-gray-700">{confidence}%</span>
+                                    </div>
+                                    <p className="text-xs text-gray-500 mt-2">Based on ratings & booking history</p>
+                                </div>
+
+                                <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                                    <h3 className="text-gray-900 font-bold mb-1">Host Performance</h3>
+                                    <div className="flex items-end gap-2">
+                                        <span className="text-3xl font-black text-rose-500">{hostScore}</span>
+                                        <div className="flex flex-col mb-1.5">
+                                            <span className="text-sm font-bold text-gray-900">/ 5.0</span>
+                                            <span className="text-xs text-gray-500">Superhost potential</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="pt-6">
                                 <h3 className="text-xl font-semibold mb-3">About this place</h3>
                                 <p className="text-gray-600 leading-relaxed whitespace-pre-line text-lg">
                                     {cardDetails.description}

@@ -27,19 +27,19 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/listingpage1'
-          element={userData != null ? <ListingPage1 /> : <Navigate to={"/"} />} />
+          element={userData != null ? <ListingPage1 /> : <Navigate to={"/login"} />} />
         <Route path='/listingpage2'
-          element={userData != null ? <ListingPage2 /> : <Navigate to={"/"} />} />
+          element={userData != null ? <ListingPage2 /> : <Navigate to={"/login"} />} />
         <Route path='/listingpage3'
-          element={userData != null ? <ListingPage3 /> : <Navigate to={"/"} />} />
+          element={userData != null ? <ListingPage3 /> : <Navigate to={"/login"} />} />
         <Route path='/mylisting'
-          element={userData != null ? <MyListing /> : <Navigate to={"/"} />} />
+          element={userData != null ? <MyListing /> : <Navigate to={"/login"} />} />
         <Route path='/viewcard'
-          element={userData != null ? <ViewCard /> : <Navigate to={"/"} />} />
+          element={userData != null ? <ViewCard /> : <Navigate to={"/login"} />} />
         <Route path='/mybooking'
-          element={userData != null ? <MyBooking /> : <Navigate to={"/"} />} />
+          element={userData != null ? <MyBooking /> : <Navigate to={"/login"} />} />
         <Route path='/booked'
-          element={userData != null ? <Booked /> : <Navigate to={"/"} />} />
+          element={userData != null ? <Booked /> : <Navigate to={"/login"} />} />
 
 
       </Routes>

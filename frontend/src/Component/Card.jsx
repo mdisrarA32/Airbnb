@@ -8,12 +8,18 @@ import { FcCancel } from "react-icons/fc";
 import { useState } from 'react';
 import { bookingDataContext } from '../Context/BookingContext';
 
+import { calculateDemand } from '../utils/calculations';
+
 function Card({ title, landMark, image1, image2, image3, rent, city, id, ratings, isBooked, host }) {
     let navigate = useNavigate()
     let { userData } = useContext(userDataContext)
     let { handleViewCard } = useContext(listingDataContext)
     let [popUp, setPopUp] = useState(false)
-    let {cancelBooking}=useContext(bookingDataContext)
+    let { cancelBooking } = useContext(bookingDataContext)
+
+    // Calculate demand
+    const demand = calculateDemand({ _id: id, ratings });
+
     const handleClick = () => {
         if (userData) {
             handleViewCard(id)
@@ -23,28 +29,114 @@ function Card({ title, landMark, image1, image2, image3, rent, city, id, ratings
         }
     }
     return (
-        <div className='w-[330px] max-w-[85%] h-[460px] flex items-start justify-start flex-col rounded-lg cursor-pointer relative z-[10] ' onClick={() => !isBooked ? handleClick() : null}>
+        <div
+            className='group w-full max-w-sm bg-white rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer relative overflow-hidden border border-gray-100'
+            onClick={() => !isBooked ? handleClick() : null}
+        >
+            {/* Badges/Actions */}
+            <div className="absolute top-3 left-3 right-3 flex justify-between z-20 pointer-events-none gap-2">
+                <div className="flex gap-2">
+                    {isBooked && (
+                        <div className='bg-green-100 text-green-700 border border-green-200 px-3 py-1 rounded-full text-xs font-bold shadow-sm flex items-center gap-1 pointer-events-auto backdrop-blur-md bg-opacity-90'>
+                            <GiConfirmed className='w-4 h-4' />
+                            Booked
+                        </div>
+                    )}
 
-            {isBooked && <div className='text-[green] bg-white rounded-lg absolute flex items-center justify-center right-1 top-1 gap-[5px] p-[5px]'><GiConfirmed className='w-[20px] h-[20px] text-[green]' />Booked</div>}
-            {isBooked && host == userData?._id && <div className='text-[red] bg-white rounded-lg absolute flex items-center justify-center right-1 top-[50px] gap-[5px] p-[5px]' onClick={()=>setPopUp(true)} ><FcCancel className='w-[20px] h-[20px]' />Cancel Booking</div>}
-
-            {popUp && <div className='w-[300px] h-[100px]  bg-[#ffffffdf] absolute top-[110px] left-[13px] rounded-lg ' >
-            <div className='w-[100%] h-[50%] text-[#2e2d2d] flex items-start justify-center rounded-lg overflow-auto text-[20px]  p-[10px]'>Booking Cancel!</div>
-                <div className='w-[100%] h-[50%] text-[18px] font-semibold flex items-start justify-center gap-[10px] text-[#986b6b]'>Are you sure? <button className='px-[20px] bg-[red] text-[white] rounded-lg hover:bg-slate-600 ' onClick={()=>{cancelBooking(id);setPopUp(false)}}>Yes</button><button className='px-[10px] bg-[red] text-[white] rounded-lg hover:bg-slate-600' onClick={()=>setPopUp(false)}>No</button></div>
-            </div>}
-           
-            <div className='w-[100%] h-[67%]  rounded-lg overflow-auto flex '>
-                <img src={image1} alt="" className='w-[100%] flex-shrink-0' />
-                <img src={image2} alt="" className='w-[100%] flex-shrink-0' />
-                <img src={image3} alt="" className='w-[100%] flex-shrink-0' />
-
-            </div>
-            <div className=' w-[100%] h-[33%] py-[20px] flex flex-col gap-[2px]'>
-                <div className='flex items-center justify-between text-[18px] '><span className='w-[80%] text-ellipsis overflow-hidden font-semibold text-nowrap text-[#4a3434]'>In {landMark.toUpperCase()},{city.toUpperCase()}</span>
-                    <span className='flex items-center justify-center gap-[5px]'><FaStar className='text-[#eb6262]' />{ratings}</span>
+                    {!isBooked && demand && (
+                        <div className={`px-3 py-1 rounded-full text-xs font-bold shadow-sm flex items-center gap-1 pointer-events-auto backdrop-blur-md bg-opacity-90 border ${demand.color}`}>
+                            <demand.icon className='w-4 h-4' />
+                            {demand.text}
+                        </div>
+                    )}
                 </div>
-                <span className='text-[15px] w-[80%] text-ellipsis overflow-hidden text-nowrap'>{title.toUpperCase()} </span>
-                <span className='text-[16px] font-semibold text-[#986b6b]'>₹{rent}/day</span>
+
+                {isBooked && host == userData?._id && (
+                    <button
+                        className='ml-auto bg-white border border-red-500 text-red-500 px-3 py-1 rounded-full text-xs font-bold shadow-sm hover:bg-red-50 transition-colors flex items-center gap-1 pointer-events-auto'
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setPopUp(true);
+                        }}
+                    >
+                        <FcCancel className='w-4 h-4' />
+                        Cancel
+                    </button>
+                )}
+            </div>
+
+            {/* Cancel Booking Popup */}
+            {popUp && (
+                <div className='absolute inset-0 bg-white/95 z-50 flex flex-col items-center justify-center p-4 text-center animate-in fade-in duration-200' onClick={(e) => e.stopPropagation()}>
+                    <div className='text-gray-800 font-semibold text-lg mb-2'>Cancel Booking?</div>
+                    <p className='text-gray-500 text-sm mb-4'>Are you sure you want to cancel this booking?</p>
+                    <div className='flex gap-2'>
+                        <button
+                            className='px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm font-medium shadow-sm'
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                cancelBooking(id);
+                                setPopUp(false);
+                            }}
+                        >
+                            Yes, Cancel
+                        </button>
+                        <button
+                            className='px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium'
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setPopUp(false);
+                            }}
+                        >
+                            No, Keep
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* Image Slider */}
+            <div className='relative w-full aspect-[4/3] overflow-hidden bg-gray-200'>
+                {/* Flex container for scrolling images if needed, or just stacking them. 
+                     Original code was a scrollable row. Keeping that behavior but observing constraints.
+                     If we want "consistent aspect ratio", we should enforce the container size.
+                 */}
+                <div className="flex w-full h-full overflow-x-auto snap-x snap-mandatory scrollbar-hide">
+                    {[image1, image2, image3].map((img, index) => (
+                        <img
+                            key={index}
+                            src={img}
+                            alt={title}
+                            className='w-full h-full object-cover flex-shrink-0 snap-center'
+                        />
+                    ))}
+                </div>
+
+                {/* Hover Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+            </div>
+
+            {/* Content */}
+            <div className='p-4'>
+                <div className='flex items-start justify-between mb-1'>
+                    <div className='flex flex-col overflow-hidden max-w-[70%]'>
+                        <h3 className='font-semibold text-gray-900 truncate' title={title}>
+                            {/* Clean formatting */}
+                            {title.charAt(0).toUpperCase() + title.slice(1).toLowerCase()}
+                        </h3>
+                        <p className='text-gray-500 text-sm truncate'>
+                            {landMark}, {city}
+                        </p>
+                    </div>
+                    <div className='flex items-center gap-1 text-sm font-medium text-gray-800'>
+                        <FaStar className='text-rose-500 w-3.5 h-3.5' />
+                        {ratings}
+                    </div>
+                </div>
+
+                <div className='mt-2 flex items-baseline gap-1'>
+                    <span className='font-bold text-gray-900 text-lg'>₹{rent}</span>
+                    <span className='text-gray-500 text-sm'>/ day</span>
+                </div>
             </div>
 
         </div>
